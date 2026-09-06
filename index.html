@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massagem SPA - Premium Glass</title>
+    <style>
+        /* --- DESIGN PREMIUM: GLASSMORPHISM & NEON --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-dark: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-light: #24243e;
+            --gold: #F9D423;
+            --gold-dark: #b8860b;
+            --purple: #8E2DE2;
+            --pink: #4A00E0;
+            --green: #00F260;
+            --red: #FF0844;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-light: #FFFFFF;
+            --text-muted: #B0B0C0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid), var(--bg-light));
+            background-attachment: fixed;
+            color: var(--text-light);
+            margin: 0; padding: 0; padding-bottom: 110px; overflow-x: hidden;
+        }
+
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+
+        .header {
+            text-align: center; padding: 40px 20px 25px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+        .header h1 {
+            background: linear-gradient(to right, var(--gold), #ffeb99);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; font-size: 34px; font-weight: 800; letter-spacing: 1px;
+        }
+        .header p { color: var(--text-muted); font-size: 14px; margin: 5px 0 15px 0; letter-spacing: 2px; text-transform: uppercase; }
+        .saudacao { display: inline-block; padding: 5px 15px; background: var(--glass-bg); border-radius: 20px; font-size: 12px; border: 1px solid var(--glass-border); color: var(--gold); }
+
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeInScale 0.4s ease forwards; }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 25px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            margin-bottom: 25px;
+        }
+
+        label { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        input[type="text"], input[type="datetime-local"], input[type="number"] {
+            width: 100%; background: rgba(0, 0, 0, 0.2); color: var(--text-light);
+            border: 1px solid var(--glass-border); border-radius: 15px; padding: 16px;
+            margin-bottom: 20px; font-size: 16px; box-sizing: border-box; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease; color-scheme: dark;
+        }
+        input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 15px rgba(249, 212, 35, 0.2); background: rgba(0,0,0,0.4); }
+
+        .row { display: flex; gap: 12px; margin-bottom: 20px; }
+        
+        .btn-servico {
+            flex: 1; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.2);
+            color: var(--text-muted); text-align: center; cursor: pointer; font-weight: 600; transition: 0.3s; border: 1px solid var(--glass-border);
+        }
+        .btn-servico.ativo { background: linear-gradient(135deg, var(--purple), var(--pink)); color: var(--text-light); border: none; box-shadow: 0 8px 20px rgba(142, 45, 226, 0.4); transform: translateY(-2px); }
+
+        .flex-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        .btn-principal {
+            width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000;
+            padding: 18px; border: none; border-radius: 15px; font-size: 16px; font-weight: 800;
+            cursor: pointer; margin-top: 10px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 25px rgba(249, 212, 35, 0.3);
+        }
+        .btn-principal:active { transform: scale(0.95); }
+
+        .btn-acao-pequeno { background: rgba(255,255,255,0.1); color: var(--text-light); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-acao-pequeno:active { transform: scale(0.9); }
+        .btn-acao-pequeno.tem-uber { background: rgba(249, 212, 35, 0.1); border-color: var(--gold); color: var(--gold); }
+        .btn-deletar { background: none; border: none; color: var(--red); font-size: 20px; cursor: pointer; padding: 5px; }
+
+        .cliente-item {
+            background: rgba(0,0,0,0.2); padding: 20px; border-radius: 20px; margin-bottom: 18px; border: 1px solid var(--glass-border); border-left: 5px solid var(--purple); position: relative; overflow: hidden;
+        }
+        .cliente-nome { font-size: 20px; font-weight: 800; margin-bottom: 5px; color: var(--text-light); }
+        .cliente-detalhe { font-size: 13px; color: var(--text-muted); margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .acoes-cliente { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+        
+        .status-badge { padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .status-pago { background: rgba(0, 242, 96, 0.15); color: var(--green); border: 1px solid rgba(0,242,96,0.3); }
+        .status-pendente { background: rgba(255, 8, 68, 0.15); color: var(--red); border: 1px solid rgba(255,8,68,0.3); }
+
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .dash-box { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 18px; text-align: center; border: 1px solid var(--glass-border); }
+        .dash-box.destaque { grid-column: span 2; background: linear-gradient(135deg, rgba(142,45,226,0.2), rgba(74,0,224,0.2)); border: 1px solid var(--purple); box-shadow: 0 0 20px rgba(142,45,226,0.2); }
+        .dash-titulo { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .dash-valor { font-size: 22px; font-weight: 800; color: var(--text-light); }
+        .dash-valor.lucro { color: var(--gold); font-size: 36px; text-shadow: 0 0 15px rgba(249, 212, 35, 0.4); }
+
+        .meta-container { margin-top: 25px; }
+        .meta-titulo { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
+        .progress-bg { width: 100%; height: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--purple), var(--green)); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--green); }
+
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px;
+            background: rgba(20, 20, 35, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; padding: 15px 10px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); z-index: 1000;
+        }
+        .nav-item { text-align: center; color: #777; cursor: pointer; flex: 1; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.4s; }
+        .nav-item.ativo { color: var(--gold); }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 6px; transition: 0.4s; filter: grayscale(100%); opacity: 0.6; }
+        .nav-item.ativo .nav-icon { transform: translateY(-8px) scale(1.2); filter: grayscale(0%); opacity: 1; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
+        .modal-box { background: var(--bg-dark); width: 85%; max-width: 320px; padding: 30px 25px; border-radius: 25px; text-align: center; border: 1px solid var(--glass-border); animation: fadeInScale 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .btn-fechar { background: none; border: none; color: var(--text-muted); font-size: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;}
+        
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--green); color: #000; padding: 15px 30px; border-radius: 30px; font-weight: 800; font-size: 13px; z-index: 3000; transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 30px rgba(0,242,96,0.4); text-transform: uppercase; letter-spacing: 1px; }
+        #toast.show { top: 30px; }
+
+        .switch { position: relative; display: inline-block; width: 56px; height: 30px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 30px; border: 1px solid var(--glass-border); }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 3px; background-color: var(--text-muted); transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: linear-gradient(90deg, var(--purple), var(--pink)); border-color: var(--purple); }
+        input:checked + .slider:before { transform: translateX(24px); background-color: #FFF; box-shadow: 0 0 10px rgba(255,255,255,0.8); }
+
+        .watermark { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; margin-top: 40px; padding-bottom: 30px; letter-spacing: 3px; text-transform: uppercase; font-weight: 800; }
+        .watermark span { color: var(--gold); opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <div id="toast">✅ Sucesso!</div>
+
+    <div class="header">
+        <h1>Jamylle SPA</h1>
+        <p>Premium System</p>
+        <span class="saudacao">Bem-vinda, Jamylle! 🌟</span>
+    </div>
+
+    <div class="container">
+        
+        <!-- TELA 1: AGENDAR -->
+        <div id="tela-agendar" class="tab-content active">
+            <div class="card">
+                <label>Nome do Cliente</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva">
+
+                <label>Data e Hora</label>
+                <input type="datetime-local" id="data">
+
+                <label>Selecione o Serviço</label>
+                <div class="row">
+                    <div class="btn-servico ativo" id="btn-massagem" onclick="selecionarServico('massagem')">Só Massagem</div>
+                    <div class="btn-servico" id="btn-ventosa" onclick="selecionarServico('ventosa')">Com Ventosa</div>
+                </div>
+
+                <div class="flex-between" id="box-promocao" style="display: none;">
+                    <label style="margin:0; color: var(--text-light);">Promoção Águas Lindas?</label>
+                    <label class="switch"><input type="checkbox" id="promocaoAL" checked onchange="atualizarPreco()"><span class="slider"></span></label>
+                </div>
+
+                <label style="color: var(--gold);">🚕 Taxa de Deslocamento (Ida)</label>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px; margin-bottom: 10px;">Esse valor será somado para o cliente pagar.</p>
+                <input type="number" id="uberIda" placeholder="Ex: 15.00" step="0.01" oninput="atualizarPreco()">
+
+                <div class="card" style="background: rgba(249, 212, 35, 0.1); border-color: rgba(249, 212, 35, 0.3); margin-top: 10px; padding: 20px;">
+                    <label style="color: var(--gold); text-align: center; font-size: 11px; margin-bottom: 5px;">VALOR TOTAL A COBRAR DO CLIENTE</label>
+                    <div id="preco-final" style="color: var(--gold); font-size: 32px; font-weight: 800; text-align: center; text-shadow: 0 0 20px rgba(249, 212, 35, 0.4);">R$ 49,90</div>
+                </div>
+
+                <div class="flex-between">
+                    <label style="margin:0; color: var(--text-light);">Cliente já pagou?</label>
+                    <label class="switch"><input type="checkbox" id="jaPago"><span class="slider"></span></label>
+                </div>
+
+                <button class="btn-principal" onclick="agendarCliente()">Confirmar Agendamento ✨</button>
+            </div>
+        </div>
+
+        <!-- TELA 2: AGENDA (Com Barra de Pesquisa!) -->
+        <div id="tela-lista" class="tab-content">
+            <input type="text" id="buscaCliente" placeholder="🔍 Pesquisar cliente na agenda..." oninput="renderizarLista()" style="margin-bottom: 20px;">
+            <div id="lista-clientes-container"></div>
+        </div>
+
+        <!-- TELA 3: FINANCEIRO (Com Meta Editável!) -->
+        <div id="tela-financeiro" class="tab-content">
+            <div class="card">
+                <div class="dash-grid">
+                    <div class="dash-box destaque">
+                        <div class="dash-titulo">LUCRO LÍQUIDO LIVRE</div>
+                        <div class="dash-valor lucro" id="dash-lucro">R$ 0,00</div>
+                        <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px; font-weight: normal; text-transform: none;">(Recebidos - Uber Ida - Uber Volta)</div>
+                    </div>
+                    <div class="dash-box" style="border-color: rgba(0,242,96,0.3);">
+                        <div class="dash-titulo" style="color: var(--green);">CAIXA TOTAL</div>
+                        <div class="dash-valor" id="dash-receita">R$ 0,00</div>
+                    </div>
+                    <div class="dash-box" style="border-color: rgba(255,8,68,0.3);">
+                        <div class="dash-titulo" style="color: var(--red);">CUSTO (UBERS)</div>
+                        <div class="dash-valor" id="dash-gasto">R$ 0,00</div>
+                    </div>
+                </div>
+
+                <div class="meta-container">
+                    <div class="meta-titulo">
+                        <span>Meta do Mês (<span id="texto-meta-valor">R$ 2.000,00</span>)</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="porcentagem-meta" style="color: var(--gold); font-weight: bold;">0%</span>
+                            <button onclick="abrirModalMeta()" style="background: none; border: none; cursor: pointer; font-size: 16px;" title="Alterar Meta">⚙️</button>
+                        </div>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-bar" id="barra-meta"></div>
+                    </div>
+                </div>
+
+                <button class="btn-principal" style="background: linear-gradient(135deg, #11998e, #38ef7d); margin-top: 25px; font-size: 14px;" onclick="copiarResumoZap()">📲 Enviar Relatório no WhatsApp</button>
+                <button class="btn-principal" style="background: rgba(255,255,255,0.1); color: var(--text-light); box-shadow: none; border: 1px solid var(--glass-border); margin-top: 15px; font-size: 14px;" onclick="abrirModalFecharMes()">🔒 Fechar Mês no Histórico</button>
+            </div>
+        </div>
+
+        <!-- TELA 4: HISTÓRICO -->
+        <div id="tela-historico" class="tab-content">
+            <div class="card">
+                <h2 style="color: var(--gold); margin-top: 0; font-size: 18px; text-transform: uppercase; text-align: center; letter-spacing: 1px;">Fechamentos Anteriores</h2>
+                <div id="lista-historico"></div>
+            </div>
+        </div>
+
+        <div class="watermark">Feito por <span>David</span> 💻</div>
+    </div>
+
+    <!-- MODAIS DE VIDRO -->
+    <div class="modal-overlay" id="modalUber">
+        <div class="modal-box">
+            <h2 style="color: var(--text-light); margin-top: 0; font-size: 20px;">🚕 Uber da Volta</h2>
+            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Insira o valor gasto para retornar.</p>
+            <input type="number" id="inputUberModal" placeholder="R$ 0.00" step="0.01" style="font-size: 24px; text-align: center; font-weight: bold; color: var(--gold);">
+            <input type="hidden" id="clienteIdModal">
+            <button class="btn-principal" onclick="salvarUberVolta()">Salvar</button>
+            <button class="btn-fechar" onclick="fecharModalUber()">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalMeta">
+        <div class="modal-box" style="border-color: var(--gold);">
+            <h2 style="color: var(--gold); margin-top: 0; font-size: 20px;">🎯 Alterar Meta</h2>
+            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Defina a nova meta de lucro para o mês.</p>
+            <input type="number" id="inputMetaModal" placeholder="2000.00" step="50" style="font-size: 24px; text-align: center; font-weight: bold; color: var(--gold);">
+            <button class="btn-principal" onclick="salvarMeta()">Salvar Meta</button>
+            <button class="btn-fechar" onclick="fecharModalMeta()">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalExcluir">
+        <div class="modal-box" style="border-color: var(--red); box-shadow: 0 0 30px rgba(255,0,0,0.3);">
+            <h2 style="color: var(--red); margin-top: 0;">Cancelar?</h2>
+            <input type="hidden" id="idExcluirModal">
+            <button class="btn-principal" style="background: linear-gradient(135deg, #FF0844, #ffb199); color: #FFF;" onclick="confirmarExclusao()">Sim, Apagar 🗑️</button>
+            <button class="btn-fechar" onclick="fecharModalExcluir()">Voltar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalFecharMes">
+        <div class="modal-box" style="border-color: var(--purple);">
+            <h2 style="color: var(--purple); margin-top: 0;">Fechar Mês? 🔒</h2>
+            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Sua agenda será zerada para começar o próximo mês.</p>
+            <input type="text" id="nomeMesModal" placeholder="Ex: Setembro/2026" style="text-align: center; font-weight: bold;">
+            <button class="btn-principal" style="background: linear-gradient(135deg, var(--purple), var(--pink)); color: white;" onclick="confirmarFechamento()">Finalizar</button>
+            <button class="btn-fechar" onclick="fecharModalMes()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- MENU INFERIOR FLUTUANTE -->
+    <div class="bottom-nav">
+        <div class="nav-item ativo" onclick="mudarTela('tela-agendar', this)">
+            <span class="nav-icon">📅</span> Agendar
+        </div>
+        <div class="nav-item" onclick="mudarTela('tela-lista', this)">
+            <span class="nav-icon">💆‍♀️</span> Agenda
+        </div>
+        <div class="nav-item" onclick="mudarTela('tela-financeiro', this)">
+            <span class="nav-icon">💎</span> Finanças
+        </div>
+        <div class="nav-item" onclick="mudarTela('tela-historico', this)">
+            <span class="nav-icon">📈</span> Histórico
+        </div>
+    </div>
+
+    <script>
+        // BANCO DE DADOS LOCAL
+        let clientes = JSON.parse(localStorage.getItem('spa_clientes_v2')) || [];
+        let historicoMeses = JSON.parse(localStorage.getItem('spa_historico_v2')) || [];
+        let metaMensal = parseFloat(localStorage.getItem('spa_meta_custom')) || 2000.00;
+        
+        let servicoAtual = 'massagem';
+        let valorBase = 49.90;
+        let valorTotalFinal = 49.90;
+
+        window.onload = () => { renderizarLista(); atualizarFinanceiro(); renderizarHistorico(); };
+
+        function salvarDados() {
+            localStorage.setItem('spa_clientes_v2', JSON.stringify(clientes));
+            localStorage.setItem('spa_historico_v2', JSON.stringify(historicoMeses));
+            localStorage.setItem('spa_meta_custom', metaMensal);
+        }
+
+        function mostrarToast(mensagem, cor = 'var(--green)') {
+            const toast = document.getElementById('toast');
+            toast.innerText = mensagem;
+            toast.style.background = cor;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function mudarTela(idTela, elementoNav) {
+            document.querySelectorAll('.tab-content').forEach(tela => tela.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('ativo'));
+            document.getElementById(idTela).classList.add('active');
+            elementoNav.classList.add('ativo');
+            if(idTela === 'tela-financeiro') atualizarFinanceiro();
+            if(idTela === 'tela-lista') renderizarLista();
+            if(idTela === 'tela-historico') renderizarHistorico();
+        }
+
+        function selecionarServico(servico) {
+            servicoAtual = servico;
+            document.getElementById('btn-massagem').classList.remove('ativo');
+            document.getElementById('btn-ventosa').classList.remove('ativo');
+            document.getElementById('btn-' + servico).classList.add('ativo');
+            document.getElementById('box-promocao').style.display = (servico === 'ventosa') ? 'flex' : 'none';
+            atualizarPreco();
+        }
+
+        function atualizarPreco() {
+            const promoAtiva = document.getElementById('promocaoAL').checked;
+            valorBase = (servicoAtual === 'ventosa') ? (promoAtiva ? 69.90 : 89.90) : 49.90;
+            const idaDigitada = parseFloat(document.getElementById('uberIda').value.replace(',', '.')) || 0;
+            valorTotalFinal = valorBase + idaDigitada;
+            document.getElementById('preco-final').innerText = 'R$ ' + valorTotalFinal.toFixed(2).replace('.', ',');
+        }
+
+        function agendarCliente() {
+            const nome = document.getElementById('nome').value;
+            const data = document.getElementById('data').value;
+            const jaPago = document.getElementById('jaPago').checked;
+            const idaDigitada = parseFloat(document.getElementById('uberIda').value.replace(',', '.')) || 0;
+
+            if (!nome || !data) { mostrarToast('Preencha nome e data!', 'var(--red)'); return; }
+
+            clientes.push({
+                id: Date.now(), nome: nome, data: data,
+                servico: servicoAtual === 'massagem' ? 'Só Massagem' : 'Massagem + Ventosa',
+                valorCobrado: valorTotalFinal,
+                uberIda: idaDigitada,
+                uberVolta: 0, 
+                pago: jaPago
+            });
+
+            salvarDados();
+            mostrarToast('✨ Agendado com sucesso!');
+            document.getElementById('nome').value = '';
+            document.getElementById('data').value = '';
+            document.getElementById('uberIda').value = '';
+            document.getElementById('jaPago').checked = false;
+            selecionarServico('massagem');
+        }
+
+        // RENDERIZAR COM FILTRO DE PESQUISA
+        function renderizarLista() {
+            const container = document.getElementById('lista-clientes-container');
+            container.innerHTML = '';
+            
+            const termoBusca = document.getElementById('buscaCliente') ? document.getElementById('buscaCliente').value.toLowerCase() : '';
+            const clientesFiltrados = clientes.filter(c => c.nome.toLowerCase().includes(termoBusca));
+
+            if (clientesFiltrados.length === 0) { 
+                container.innerHTML = '<div class="card" style="text-align:center; color: var(--text-muted);">Nenhum cliente encontrado.</div>'; 
+                return; 
+            }
+
+            const clientesOrd = [...clientesFiltrados].sort((a, b) => new Date(a.data) - new Date(b.data));
+
+            clientesOrd.forEach(c => {
+                let d = ""; try { d = new Date(c.data).toLocaleString('pt-BR').slice(0, -3); } catch(e) { d = c.data; }
+                
+                const idaTxt = (c.uberIda > 0) ? ` | Ida: R$ ${c.uberIda.toFixed(2).replace('.',',')}` : '';
+                const btnStatus = c.pago ? `<span class="status-badge status-pago" onclick="alternarPagamento(${c.id})">✅ PAGO</span>` : `<span class="status-badge status-pendente" onclick="alternarPagamento(${c.id})">⏳ PENDENTE</span>`;
+                const btnUberClass = c.uberVolta > 0 ? 'btn-acao-pequeno tem-uber' : 'btn-acao-pequeno';
+                const textoUber = c.uberVolta > 0 ? `🚕 Volta: R$ ${c.uberVolta.toFixed(2).replace('.', ',')}` : `🚕 ADD VOLTA`;
+
+                const div = document.createElement('div');
+                div.className = 'cliente-item';
+                div.innerHTML = `
+                    <div class="cliente-nome">${c.nome}</div>
+                    <div class="cliente-detalhe">📅 ${d}</div>
+                    <div class="cliente-detalhe">💆‍♀️ ${c.servico} (Total: R$ ${c.valorCobrado.toFixed(2).replace('.', ',')}${idaTxt})</div>
+                    <div class="acoes-cliente">
+                        ${btnStatus}
+                        <div style="display: flex; gap: 8px;">
+                            <button class="${btnUberClass}" onclick="abrirModalUber(${c.id}, ${c.uberVolta})">${textoUber}</button>
+                            <button class="btn-deletar" onclick="abrirModalExcluir(${c.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function alternarPagamento(id) {
+            const c = clientes.find(c => c.id === id);
+            if (c) { c.pago = !c.pago; salvarDados(); mostrarToast(c.pago ? 'Pago! 💰' : 'Pendente ⏳', c.pago ? 'var(--green)' : 'var(--gold)'); renderizarLista(); }
+        }
+
+        // Modais Uber / Excluir / Meta
+        function abrirModalUber(id, v) { document.getElementById('clienteIdModal').value = id; document.getElementById('inputUberModal').value = v > 0 ? v : ''; document.getElementById('modalUber').style.display = 'flex'; }
+        function fecharModalUber() { document.getElementById('modalUber').style.display = 'none'; }
+        function salvarUberVolta() {
+            const id = parseInt(document.getElementById('clienteIdModal').value);
+            const v = parseFloat(document.getElementById('inputUberModal').value.replace(',', '.')) || 0;
+            const c = clientes.find(c => c.id === id);
+            if (c) { c.uberVolta = v; salvarDados(); mostrarToast('🚕 Volta salva!'); fecharModalUber(); renderizarLista(); }
+        }
+
+        function abrirModalMeta() { document.getElementById('inputMetaModal').value = metaMensal; document.getElementById('modalMeta').style.display = 'flex'; }
+        function fecharModalMeta() { document.getElementById('modalMeta').style.display = 'none'; }
+        function salvarMeta() {
+            const novaMeta = parseFloat(document.getElementById('inputMetaModal').value.replace(',', '.')) || 2000;
+            metaMensal = novaMeta;
+            salvarDados();
+            fecharModalMeta();
+            atualizarFinanceiro();
+            mostrarToast('🎯 Meta atualizada com sucesso!');
+        }
+
+        function abrirModalExcluir(id) { document.getElementById('idExcluirModal').value = id; document.getElementById('modalExcluir').style.display = 'flex'; }
+        function fecharModalExcluir() { document.getElementById('modalExcluir').style.display = 'none'; }
+        function confirmarExclusao() {
+            clientes = clientes.filter(c => c.id !== parseInt(document.getElementById('idExcluirModal').value));
+            salvarDados(); fecharModalExcluir(); mostrarToast('🗑️ Apagado!', 'var(--red)'); renderizarLista(); atualizarFinanceiro();
+        }
+
+        // FINANCEIRO E META
+        let lucroLiquidoAtual = 0;
+        function atualizarFinanceiro() {
+            let recebidos = 0, ubersTotais = 0;
+            clientes.forEach(c => { 
+                if (c.pago) recebidos += c.valorCobrado; 
+                ubersTotais += (c.uberIda || 0) + (c.uberVolta || 0); 
+            });
+            
+            lucroLiquidoAtual = recebidos - ubersTotais;
+
+            document.getElementById('dash-receita').innerText = `R$ ${recebidos.toFixed(2).replace('.', ',')}`;
+            document.getElementById('dash-gasto').innerText = `R$ ${ubersTotais.toFixed(2).replace('.', ',')}`;
+            document.getElementById('dash-lucro').innerText = `R$ ${lucroLiquidoAtual.toFixed(2).replace('.', ',')}`;
+
+            document.getElementById('texto-meta-valor').innerText = `R$ ${metaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            let porcentagem = (lucroLiquidoAtual / metaMensal) * 100;
+            if(porcentagem < 0) porcentagem = 0; if(porcentagem > 100) porcentagem = 100;
+            document.getElementById('barra-meta').style.width = `${porcentagem}%`;
+            document.getElementById('porcentagem-meta').innerText = `${porcentagem.toFixed(0)}%`;
+        }
+
+        function copiarResumoZap() {
+            let recebidos = document.getElementById('dash-receita').innerText;
+            let gastos = document.getElementById('dash-gasto').innerText;
+            let lucro = document.getElementById('dash-lucro').innerText;
+            let meta = document.getElementById('porcentagem-meta').innerText;
+            let texto = `*Resumo - Jamylle SPA 💎*\n\n💰 *Caixa Total:* ${recebidos}\n🚕 *Transporte (Ida+Volta):* ${gastos}\n✨ *LUCRO LIVRE:* ${lucro}\n🎯 *Meta Concluída:* ${meta}\n\n_By David_ 🚀`;
+            navigator.clipboard.writeText(texto).then(() => { mostrarToast("📋 Resumo copiado!"); }).catch(() => { mostrarToast("Erro ao copiar.", "var(--red)"); });
+        }
+
+        // HISTÓRICO
+        function abrirModalFecharMes() {
+            if(clientes.length === 0) { mostrarToast("A agenda já está vazia!", "var(--gold)"); return; }
+            const m = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            const h = new Date();
+            document.getElementById('nomeMesModal').value = `${m[h.getMonth()]}/${h.getFullYear()}`;
+            document.getElementById('modalFecharMes').style.display = 'flex';
+        }
+        function fecharModalMes() { document.getElementById('modalFecharMes').style.display = 'none'; }
+        
+        function confirmarFechamento() {
+            const nomeMes = document.getElementById('nomeMesModal').value;
+            if(!nomeMes) return mostrarToast("Preencha o mês!", "var(--red)");
+            historicoMeses.push({ id: Date.now(), nome: nomeMes, lucro: lucroLiquidoAtual });
+            clientes = []; salvarDados(); fecharModalMes(); mostrarToast("🔒 Mês salvo com sucesso!");
+            atualizarFinanceiro(); renderizarLista(); mudarTela('tela-historico', document.querySelectorAll('.nav-item')[3]);
+        }
+
+        function renderizarHistorico() {
+            const container = document.getElementById('lista-historico');
+            container.innerHTML = '';
+            if (historicoMeses.length === 0) { container.innerHTML = '<div style="text-align:center; color: var(--text-muted); margin-top: 20px;">Nenhum histórico.</div>'; return; }
+            const histOrd = [...historicoMeses].sort((a, b) => b.id - a.id);
+            histOrd.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.style.background = 'rgba(0,0,0,0.3)'; div.style.marginBottom = '15px'; div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.borderLeft = '4px solid var(--gold)';
+                div.innerHTML = `<div style="font-weight: 800; font-size: 15px; color: #FFF;">📅 ${h.nome}</div><div style="font-weight: 800; font-size: 20px; color: var(--gold);">R$ ${h.lucro.toFixed(2).replace('.', ',')}</div>`;
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
